@@ -9,7 +9,7 @@ const cors = require('cors');
 // Import OUR stuff (our files, our components)
 const studentsController = require('./controllers/studentsController');
 const studentsControllerV2 = require('./controllers/v2/studentsControllerV2');
-
+const db = require('./db');
 // Init express application
 const app = express();
 
@@ -29,6 +29,16 @@ app.get('/', (request, response) => {
   response.status(200).json({ data: 'Service is running' });
 });
 
+// TODO: Remove this test route
+app.get('/tests', async (request, response) => {
+  try {
+    const tests = await db.any('SELECT * FROM tests;');
+
+    response.status(200).json({ data: tests });
+  } catch (err) {
+    response.status(500).json({ error: err.message });
+  }
+});
 
 
 module.exports = app;
